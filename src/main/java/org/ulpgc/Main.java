@@ -1,7 +1,5 @@
 package org.ulpgc;
 
 public class Main {
-    public static void main(String[] args) {
-        System.out.println("Hello world!");
-    }
+    //aqui va lo del controller, pero del main del otro, en en view va el codigo output del controller
 }
