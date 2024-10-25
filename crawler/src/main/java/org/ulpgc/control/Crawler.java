@@ -14,9 +14,8 @@ import org.jsoup.nodes.Element;
 
 public class Crawler {
 
-    public static int downloadBook(String bookId, String downloadDirectory) {
+    public static int downloadBook(int bookId, String downloadDirectory) {
         String bookUrl = "https://www.gutenberg.org/files/" + bookId + "/" + bookId + "-0.txt";
-
         Path directoryPath = Paths.get(downloadDirectory);
         try {
             if (!Files.exists(directoryPath)) {
@@ -65,7 +64,7 @@ public class Crawler {
         }
     }
 
-    public static String getTitle(String bookId) {
+    public static String getTitle(int bookId) {
         String bookUrl = "https://www.gutenberg.org/ebooks/" + bookId;
         try {
             Document doc = Jsoup.connect(bookUrl).get();
@@ -83,13 +82,6 @@ public class Crawler {
             System.err.println("An error occurred: " + e.getMessage());
             return null;
         }
-    }
-
-    public static void main(String[] args) {
-        downloadBook("1", "./Datamart");
-        downloadBook("4", "./Datamart");
-        downloadBook("7", "./Datamart");
-        downloadBook("22", "./Datamart");
     }
 }
 
