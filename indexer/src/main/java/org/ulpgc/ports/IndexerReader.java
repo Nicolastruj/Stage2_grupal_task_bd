@@ -1,4 +1,4 @@
-package org.ulpgc.control;
+package org.ulpgc.ports;
 
 import org.ulpgc.exceptions.IndexerException;
 import org.ulpgc.model.Book;
@@ -6,5 +6,5 @@ import org.ulpgc.model.Book;
 import java.util.List;
 
 public interface IndexerReader {
-    public List<Book> read() throws IndexerException;
+    List<Book> read() throws IndexerException;
 }

@@ -1,7 +1,8 @@
-package org.ulpgc.control;
+package org.ulpgc.implementations;
 
 import org.ulpgc.exceptions.IndexerException;
 import org.ulpgc.model.Book;
+import org.ulpgc.ports.IndexerStore;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -10,7 +11,7 @@ import java.nio.file.Path;
 public class HierarchicalCsvStore implements IndexerStore {
 
     private static Path invertedIndexPath;
-    private static int maxDepth = 3;
+    private static final int maxDepth = 3;
 
     public HierarchicalCsvStore(Path invertedIndexPath) {
         HierarchicalCsvStore.invertedIndexPath = invertedIndexPath;
@@ -62,7 +63,4 @@ public class HierarchicalCsvStore implements IndexerStore {
         }
     }
 
-    public static void setMaxDepth(int maxDepth) {
-        HierarchicalCsvStore.maxDepth = maxDepth;
-    }
 }
