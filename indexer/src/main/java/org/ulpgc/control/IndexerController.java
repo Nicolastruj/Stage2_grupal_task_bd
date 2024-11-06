@@ -1,5 +1,10 @@
 package org.ulpgc.control;
 
+import org.ulpgc.exceptions.IndexerException;
+import org.ulpgc.model.Book;
+
+import java.util.List;
+
 public class IndexerController {
     private final IndexerReader indexerReader;
     private final IndexerStore indexerStore;
@@ -9,8 +14,12 @@ public class IndexerController {
         this.indexerStore = indexerStore;
     }
 
-    public void execute(){
-        //TODO indexerReader.read(bookPath)
-        //TODO indexerStore.index(book)
+    public void execute() throws IndexerException {
+        //TODO indexerReader.read() only last books
+        List<Book> books = indexerReader.read();
+
+        for (Book book : books) {
+            indexerStore.index(book);
+        }
     }
 }

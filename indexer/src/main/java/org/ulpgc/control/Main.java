@@ -1,13 +1,24 @@
 package org.ulpgc.control;
 
+import org.ulpgc.exceptions.IndexerException;
+
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 public class Main {
-    public static void main(String[] args) {
-        IndexerReader indexerReader = new GutenbergBookReader();
-        IndexerStore dictionaryIndexerStore = new DictionaryIndexerStore();
-        IndexerStore jsonIndexerStore = new JsonIndexerStore();
-        IndexerController dictionaryIndexerController = new IndexerController(indexerReader,dictionaryIndexerStore);
-        IndexerController jsonIndexerController = new IndexerController(indexerReader,jsonIndexerStore);
-        //TODO dictionaryIndexerController.execute()
+    public static void main(String[] args) throws IndexerException {
+        Path bookDatalakePath = Paths.get(System.getProperty("user.dir"), "BookDatalake"); // todo review
+        Path invertedIndexPath = Paths.get(System.getProperty("user.dir"), "InvertedIndex");
+        IndexerReader indexerReader = new GutenbergBookReader(bookDatalakePath.toString());
+
+        IndexerStore hierarchicalCsvStore = new HierarchicalCsvStore(invertedIndexPath);
+        // IndexerStore jsonIndexerStore = new JsonIndexerStore();
+        IndexerController hierarchicalCsvController = new IndexerController(indexerReader, hierarchicalCsvStore);
+        hierarchicalCsvController.execute();
+
+
+        // IndexerController jsonIndexerController = new IndexerController(indexerReader,jsonIndexerStore);
+        //TODO hierarchicalCsvController.execute()
         //TODO jsonIndexerController.execute()
     }
 }
