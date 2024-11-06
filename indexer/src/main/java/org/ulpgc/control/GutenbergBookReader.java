@@ -21,8 +21,8 @@ public class GutenbergBookReader implements IndexerReader {
     }
 
     @Override
-    public List<Book> read() throws IndexerException {
-        File folder = new File(path);
+    public List<Book> read(String trayPath) throws IndexerException {
+        File folder = new File(trayPath);
         File[] listOfFiles = folder.listFiles();
         books = new ArrayList<>();
         if (listOfFiles != null) {
