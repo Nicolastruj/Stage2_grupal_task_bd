@@ -20,5 +20,7 @@ public class Main {
         // IndexerController jsonIndexerController = new IndexerController(indexerReader,jsonIndexerStore);
         //TODO hierarchicalCsvController.execute()
         //TODO jsonIndexerController.execute()
+        //TODO execute periodically
+        //TODO execute parallel
     }
 }

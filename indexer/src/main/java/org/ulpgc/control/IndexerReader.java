@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface IndexerReader {
     public List<Book> read() throws IndexerException;
+    public String getPath() throws IndexerException;
 }

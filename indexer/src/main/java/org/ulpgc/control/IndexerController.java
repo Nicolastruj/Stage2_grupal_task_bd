@@ -3,6 +3,8 @@ package org.ulpgc.control;
 import org.ulpgc.exceptions.IndexerException;
 import org.ulpgc.model.Book;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 public class IndexerController {

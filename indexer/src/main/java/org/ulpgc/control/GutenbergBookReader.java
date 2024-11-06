@@ -78,4 +78,5 @@ public class GutenbergBookReader implements IndexerReader {
     public List<Book> getBooks() {
         return books;
     }
+    public String getPath() {return path;}
 }

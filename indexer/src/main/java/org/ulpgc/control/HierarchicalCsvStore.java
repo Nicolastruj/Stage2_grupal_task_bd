@@ -3,9 +3,12 @@ package org.ulpgc.control;
 import org.ulpgc.exceptions.IndexerException;
 import org.ulpgc.model.Book;
 
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class HierarchicalCsvStore implements IndexerStore {
 
@@ -26,12 +29,12 @@ public class HierarchicalCsvStore implements IndexerStore {
             String word = words[i];
             if (!word.isEmpty()) {
                 System.out.println("Indexing word: " + word + " in book " + book.getBookId() + " at position " + i);
-                addFileToDirectoryStructure(book.getBookId(), i, word.toLowerCase());
+                addFileToDirectoryStructureAppending(book.getBookId(), i, word.toLowerCase());
             }
         }
     }
 
-    public static void addFileToDirectoryStructure(String bookId, int position, String word) throws IndexerException {
+    public static void addFileToDirectoryStructureAppending(String bookId, int position, String word) throws IndexerException {
         Path currentPath = invertedIndexPath;
 
         try {
@@ -56,6 +59,59 @@ public class HierarchicalCsvStore implements IndexerStore {
             String csvEntry = bookId + "," + position + "\n";
             Files.write(filePath, csvEntry.getBytes(), java.nio.file.StandardOpenOption.APPEND);
             System.out.println("Appended to CSV file: " + filePath);
+
+        } catch (IOException e) {
+            throw new IndexerException(e.getMessage(), e);
+        }
+    }
+
+    public static void addFileToDirectoryStructureAppending2(String bookId, int position, String word) throws IndexerException {
+        Path currentPath = invertedIndexPath;
+
+        try {
+            int depth = Math.min(maxDepth, word.length());
+            for (int i = 0; i < depth; i++) {
+                String letter = String.valueOf(word.charAt(i));
+                currentPath = currentPath.resolve(letter);
+
+                if (!Files.exists(currentPath)) {
+                    Files.createDirectories(currentPath);
+                    System.out.println("Created directory: " + currentPath);
+                }
+            }
+
+            Path filePath = currentPath.resolve(word + ".csv");
+            Map<String, List<Integer>> indexMap = new HashMap<>();
+
+            // Leer el archivo existente si ya contiene datos
+            if (Files.exists(filePath)) {
+                List<String> lines = Files.readAllLines(filePath);
+                for (String line : lines) {
+                    String[] parts = line.split(",", 2);
+                    String existingBookId = parts[0];
+                    List<Integer> positions = Arrays.stream(parts[1].split(";"))
+                            .map(Integer::parseInt)
+                            .collect(Collectors.toList());
+                    indexMap.put(existingBookId, positions);
+                }
+            }
+
+            // Agregar la nueva posición al `bookId` correspondiente
+            indexMap.putIfAbsent(bookId, new ArrayList<>());
+            indexMap.get(bookId).add(position);
+
+            // Escribir de nuevo el archivo con el nuevo formato
+            try (BufferedWriter writer = Files.newBufferedWriter(filePath)) {
+                for (Map.Entry<String, List<Integer>> entry : indexMap.entrySet()) {
+                    String line = entry.getKey() + "," + entry.getValue().stream()
+                            .map(String::valueOf)
+                            .collect(Collectors.joining(";"));
+                    writer.write(line);
+                    writer.newLine();
+                }
+            }
+
+            System.out.println("Updated CSV file: " + filePath);
 
         } catch (IOException e) {
             throw new IndexerException(e.getMessage(), e);
