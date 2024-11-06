@@ -5,7 +5,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.io.IOException;
 
-public class JsonIndexLoader {
+public class JsonIndexLoader { // remake to an Interface ?? 
 
     public JSONObject loadJsonIndex(String word, String indexFolder) {
         String firstLetter = word.substring(0, 1).toLowerCase();
