@@ -2,6 +2,8 @@ package org.ulpgc.control;
 
 import org.ulpgc.exceptions.IndexerException;
 import org.ulpgc.model.Book;
+import org.ulpgc.ports.IndexerReader;
+import org.ulpgc.ports.IndexerStore;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -9,20 +11,21 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Stream;
 
-public class IndexerController {
+public class IndexerCommand {
     private final IndexerReader indexerReader;
     private final IndexerStore indexerStore;
 
-    public IndexerController(IndexerReader indexerReader, IndexerStore indexerStore) {
+    public IndexerCommand(IndexerReader indexerReader, IndexerStore indexerStore) {
         this.indexerReader = indexerReader;
         this.indexerStore = indexerStore;
     }
 
     public void execute() throws IndexerException {
-        Path bookPath = Paths.get(System.getProperty("user.dir"), indexerReader.getPath());
+        Path bookPath = Paths.get(indexerReader.getPath());
         Path tempTray = Paths.get(System.getProperty("user.dir"), "tempTray");
         try {
             if (!Files.exists(tempTray)) {
@@ -37,6 +40,29 @@ public class IndexerController {
 
         for (Book book : books) {
             indexerStore.index(book);
+        }
+        try {
+            // Si la tray es un directorio, primero elimina todos los archivos dentro
+            if (Files.isDirectory(tempTray)) {
+                try (Stream<Path> files = Files.walk(tempTray)) {
+                    files.sorted(Comparator.reverseOrder())  // Eliminar primero los archivos más profundos
+                            .forEach(path -> {
+                                try {
+                                    Files.delete(path);
+                                } catch (IOException e) {
+                                    System.err.println("Error deleting file: " + path);
+                                }
+                            });
+                } catch (IOException e) {
+                    throw new IndexerException("No se pudo recorrer el directorio para eliminar los archivos", e);
+                }
+            }
+
+            // Ahora elimina el directorio o archivo vacío
+            Files.deleteIfExists(tempTray);
+            System.out.println("Temporary tray deleted: " + tempTray);
+        } catch (IOException e) {
+            throw new IndexerException("No se pudo eliminar la tray", e);
         }
     }
 

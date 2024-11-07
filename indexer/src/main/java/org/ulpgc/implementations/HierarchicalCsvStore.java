@@ -1,7 +1,8 @@
-package org.ulpgc.control;
+package org.ulpgc.implementations;
 
 import org.ulpgc.exceptions.IndexerException;
 import org.ulpgc.model.Book;
+import org.ulpgc.ports.IndexerStore;
 
 import java.io.BufferedWriter;
 import java.io.IOException;

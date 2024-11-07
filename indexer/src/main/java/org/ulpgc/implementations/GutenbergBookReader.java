@@ -1,7 +1,8 @@
-package org.ulpgc.control;
+package org.ulpgc.implementations;
 
 import org.ulpgc.exceptions.IndexerException;
 import org.ulpgc.model.Book;
+import org.ulpgc.ports.IndexerReader;
 
 import java.io.File;
 import java.io.IOException;
@@ -13,7 +14,6 @@ public class GutenbergBookReader implements IndexerReader {
 
     private final String path;
     private List<Book> books;
-    private static int bookIdCounter = 1;
 
     // Constructor
     public GutenbergBookReader(String path) {
@@ -56,7 +56,7 @@ public class GutenbergBookReader implements IndexerReader {
                 String author = authorParts[0];
                 String index = authorParts[1];
 
-                String bookId = String.valueOf(bookIdCounter++);
+                String bookId = index;
                 String url = "https://www.gutenberg.org/files/" + bookId + "/" + bookId + "-0.txt";
 
                 String content = readFileContent(file);
