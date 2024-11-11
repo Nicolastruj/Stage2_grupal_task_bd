@@ -1,4 +1,6 @@
-package org.ulpgc.implementations;
+package org.ulpgc.apps;
+
+import org.ulpgc.control.CrawlerController;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
