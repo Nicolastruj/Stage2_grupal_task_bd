@@ -30,7 +30,7 @@ public class HierarchicalCsvStore implements IndexerStore {
             String word = words[i];
             if (!word.isEmpty()) {
                 System.out.println("Indexing word: " + word + " in book " + book.getBookId() + " at position " + i);
-                addFileToDirectoryStructureAppending(book.getBookId(), i, word.toLowerCase());
+                addFileToDirectoryStructureAppending2(book.getBookId(), i, word.toLowerCase());
             }
         }
     }

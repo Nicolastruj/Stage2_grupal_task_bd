@@ -3,7 +3,14 @@
   <component name="CsvFileAttributes">
     <option name="attributeMap">
       <map>
-        <entry key="\metadata.csv">
+        <entry key="/InvertedIndex/e/a/c/each.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value=";" />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="/metadata.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />
