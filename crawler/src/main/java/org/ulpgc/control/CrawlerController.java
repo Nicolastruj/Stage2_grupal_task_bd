@@ -8,7 +8,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static org.ulpgc.control.Crawler.downloadBook;
+import static org.ulpgc.implementations.Crawler.downloadBook;
 
 
 public class CrawlerController {
