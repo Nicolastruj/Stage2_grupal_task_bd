@@ -1,4 +1,6 @@
 package org.ulpgc.control;
 
-public class CrawlerCommand implements Command{
+import org.ulpgc.control.Command;
+
+public class CrawlerCommand implements Command {
 }

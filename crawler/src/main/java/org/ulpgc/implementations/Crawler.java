@@ -1,5 +1,9 @@
 package org.ulpgc.implementations;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+
 import java.io.BufferedInputStream;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
@@ -10,9 +14,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.concurrent.atomic.AtomicInteger;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
 
 public class Crawler implements org.ulpgc.model.Crawler {
 
