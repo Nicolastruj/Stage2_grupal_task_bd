@@ -35,7 +35,7 @@ public class QueryEngineController {
             }
 
             try {
-                List<Map<String, Object>> results = queryEngine.query(userInput, indexFolder.toString(), metadataPath.toString(), bookFolder.toString(), 3);
+                List<Map<String, Object>> results = queryEngine.query(userInput, indexFolder.toString(), metadataPath.toString(), bookFolder.toString());
 
                 if (!results.isEmpty()) {
                     System.out.println("\nResults for '" + userInput + "':");
@@ -47,7 +47,7 @@ public class QueryEngineController {
                         System.out.println("Paragraphs:");
                         List<String> paragraphs = (List<String>) result.get("paragraphs");
                         for (String paragraph : paragraphs) {
-                            System.out.println(paragraph);
+                            System.out.println(paragraph + "\n\n");
                         }
                     }
                 } else {
