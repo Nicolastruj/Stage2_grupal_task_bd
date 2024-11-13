@@ -1,20 +1,36 @@
 package org.ulpgc.control;
 
-import org.json.JSONObject;
-import org.ulpgc.model.Book;
-import org.ulpgc.ports.IndexerReader;
-import org.ulpgc.ports.IndexerStore;
-
 import java.util.*;
+
+import org.ulpgc.model.Book;
+
+import org.json.JSONObject;
+import org.ulpgc.implementations.MetadataCSVLoader;
+import org.ulpgc.implementations.MetadataLoader;
+import org.ulpgc.ports.QueryReader;
+import org.ulpgc.ports.QueryStore;
+
+
+
+
+import java.util.List;
+import java.util.Map;
+
+
+
 
 public class QueryEngine {
 
-    private final IndexerReader indexerReader;
-    private final IndexerStore indexerStore;
-    private MetadataLoader metadataLoader;
-    private ParagraphExtractor paragraphExtractor;
 
-    public QueryEngine(IndexerReader indexerReader, IndexerStore indexerStore, MetadataLoader metadataLoader, ParagraphExtractor paragraphExtractor) {
+    private final QueryReader indexerReader;Extractor paragraphExtractor;
+
+    private MetadataLoader metadataLoader;
+    public QueryEngine(MetadataLoader metadataLoader) {
+        this.metadataLoader = metadataLoader;
+    }
+
+
+    public QueryEngine(QueryReader indexerReader, QueryStore indexerStore, MetadataLoader metadataLoader, ParagraphExtractor paragraphExtractor) {
         this.indexerReader = indexerReader;
         this.indexerStore = indexerStore;
         this.metadataLoader = metadataLoader;

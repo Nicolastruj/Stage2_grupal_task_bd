@@ -21,8 +21,8 @@ public class Main {
         QueryEngine queryEngine = new QueryEngine(indexerReader, indexerStore, metadataLoader, paragraphExtractor);
 
         // Sample query execution
-        String inputQuery = "example query"; // Replace with desired query
-        String indexFolder = "path/to/indexFolder"; // Replace with the actual path to index folder
+        String inputQuery = "hello"; 
+        String indexFolder = "path/to/indexFolder"; 
         String metadataFolder = "path/to/metadataFolder"; // Replace with the actual path to metadata folder
         String bookFolder = "path/to/bookFolder"; // Replace with the actual path to book folder
         int maxOccurrences = 5; // Number of occurrences to display
