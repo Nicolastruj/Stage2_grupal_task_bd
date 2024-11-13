@@ -6,5 +6,6 @@ import org.ulpgc.model.Book;
 import java.util.List;
 
 public interface IndexerReader {
-    List<Book> read() throws IndexerException;
+    public List<Book> read(String path) throws IndexerException;
+    public String getPath() throws IndexerException;
 }

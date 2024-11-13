@@ -9,9 +9,7 @@
     <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <modules>
-        <module>indexer</module>
         <module>crawler</module>
-        <module>query-engine</module>
     </modules>
 
     <properties>

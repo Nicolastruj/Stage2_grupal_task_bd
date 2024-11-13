@@ -14,7 +14,6 @@ public class GutenbergBookReader implements IndexerReader {
 
     private final String path;
     private List<Book> books;
-    private static int bookIdCounter = 1;
 
     // Constructor
     public GutenbergBookReader(String path) {
@@ -22,8 +21,8 @@ public class GutenbergBookReader implements IndexerReader {
     }
 
     @Override
-    public List<Book> read() throws IndexerException {
-        File folder = new File(path);
+    public List<Book> read(String trayPath) throws IndexerException {
+        File folder = new File(trayPath);
         File[] listOfFiles = folder.listFiles();
         books = new ArrayList<>();
         if (listOfFiles != null) {
@@ -47,26 +46,20 @@ public class GutenbergBookReader implements IndexerReader {
 
     private Book createBookFromFile(File file) throws IndexerException {
         String fileName = file.getName();
-        String[] parts = fileName.split(" by ");
+        String[] parts = fileName.split("_");
         if (parts.length == 2) {
-            String title = parts[0];
-            String authorAndIndex = parts[1].replace(".txt", "");
-            String[] authorParts = authorAndIndex.split("_");
+            String index = parts[1].replace(".txt", "");
 
-            if (authorParts.length == 2) {
-                String author = authorParts[0];
-                String index = authorParts[1];
+            String bookId = index;
+            String url = "https://www.gutenberg.org/files/" + bookId + "/" + bookId + "-0.txt";
 
-                String bookId = String.valueOf(bookIdCounter++);
-                String url = "https://www.gutenberg.org/files/" + bookId + "/" + bookId + "-0.txt";
+            String content = readFileContent(file);
 
-                String content = readFileContent(file);
-
-                return new Book(bookId, title, author, url, content);
-            }
+            return new Book(bookId, content);
         }
         return null;
     }
+
 
     private String readFileContent(File file) throws IndexerException {
         try {
@@ -79,4 +72,5 @@ public class GutenbergBookReader implements IndexerReader {
     public List<Book> getBooks() {
         return books;
     }
+    public String getPath() {return path;}
 }
