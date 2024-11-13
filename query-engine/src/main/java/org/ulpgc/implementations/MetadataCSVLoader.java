@@ -1,7 +1,7 @@
 package org.ulpgc.implementations;
 
-import org.ulpgc.exceptions.QueryException;
 import org.ulpgc.model.Book;
+import org.ulpgc.ports.MetadataLoader;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -9,11 +9,9 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-
-
 public class MetadataCSVLoader implements MetadataLoader {
     @Override
-    public Map<String, Book> loadMetadata(String metadataPath) throws QueryEngineException {
+    public Map<String, Book> loadMetadata(String metadataPath) throws IOException {
         Map<String, Book> metadata = new HashMap<>();
 
         try (BufferedReader reader = new BufferedReader(new FileReader(metadataPath))) {
@@ -29,8 +27,6 @@ public class MetadataCSVLoader implements MetadataLoader {
 
                 metadata.put(bookId, new Book(bookId, title, author, url));
             }
-        } catch (IOException e) {
-            throw new QueryEngineException("Error reading metadata file: " + e.getMessage(), e);
         }
         return metadata;
     }
