@@ -4,7 +4,7 @@ import org.ulpgc.ports.IndexLoader;
 
 import java.io.*;
 import java.util.*;
-public class InvertedIndexLoader implements IndexLoader {
+public class InvertedIndexLoaderAggregated implements IndexLoader {
         @Override
         public Map<String, List<Integer>> loadWord(String word, String indexFolder) throws QueryEngineException {
             // Create a path

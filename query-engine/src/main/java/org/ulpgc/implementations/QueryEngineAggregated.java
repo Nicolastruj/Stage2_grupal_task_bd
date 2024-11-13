@@ -8,12 +8,12 @@ import org.ulpgc.model.Book;
 import java.io.*;
 import java.util.*;
 
-public class QueryEngine1 {
+public class QueryEngineAggregated {
 
     private final IndexLoader indexLoader;
     private final MetadataLoader metadataLoader;
 
-    public QueryEngine1(IndexLoader indexLoader, MetadataLoader metadataLoader) {
+    public QueryEngineAggregated(IndexLoader indexLoader, MetadataLoader metadataLoader) {
         this.indexLoader = indexLoader;
         this.metadataLoader = metadataLoader;
     }
