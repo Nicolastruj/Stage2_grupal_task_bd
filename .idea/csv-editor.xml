@@ -3,49 +3,35 @@
   <component name="CsvFileAttributes">
     <option name="attributeMap">
       <map>
-        <entry key="\InvertedIndex\a\b\a\abandon.csv">
+        <entry key="/InvertedIndex/0/0/0/000.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />
             </Attribute>
           </value>
         </entry>
-        <entry key="\InvertedIndex\a\b\d\abdicated.csv">
-          <value>
-            <Attribute>
-              <option name="separator" value="," />
-            </Attribute>
-          </value>
-        </entry>
-        <entry key="\InvertedIndex\k\a\n\kansas.csv">
-          <value>
-            <Attribute>
-              <option name="separator" value="," />
-            </Attribute>
-          </value>
-        </entry>
-        <entry key="\InvertedIndex\s\a\c\sacred.csv">
-          <value>
-            <Attribute>
-              <option name="separator" value="," />
-            </Attribute>
-          </value>
-        </entry>
-        <entry key="\InvertedIndex\t\a\p\tap.csv">
-          <value>
-            <Attribute>
-              <option name="separator" value="," />
-            </Attribute>
-          </value>
-        </entry>
-        <entry key="\InvertedIndex\t\a\p\tape.csv">
+        <entry key="/InvertedIndex/e/a/c/each.csv">
           <value>
             <Attribute>
               <option name="separator" value=";" />
             </Attribute>
           </value>
         </entry>
-        <entry key="\metadata.csv">
+        <entry key="/InvertedIndex/e/d/i/edition.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="/InvertedIndex/e/d/i/editions.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value=";" />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="/metadata.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />
