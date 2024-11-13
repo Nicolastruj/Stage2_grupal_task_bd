@@ -22,7 +22,7 @@ import java.util.Map;
 public class QueryEngine {
 
 
-    private final QueryReader indexerReader;Extractor paragraphExtractor;
+    private final QueryReader indexerReader; Extractor paragraphExtractor;
 
     private MetadataLoader metadataLoader;
     public QueryEngine(MetadataLoader metadataLoader) {
