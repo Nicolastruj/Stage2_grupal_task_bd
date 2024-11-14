@@ -45,17 +45,38 @@
             </Attribute>
           </value>
         </entry>
-        <entry key="\InvertedIndex\6\2\62.csv">
+        <entry key="\InvertedIndex\7\7.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value=";" />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\InvertedIndex\a\n\a\analyzed.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />
             </Attribute>
           </value>
         </entry>
-        <entry key="\InvertedIndex\7\7.csv">
+        <entry key="\InvertedIndex\a\n\n\annihilation.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\InvertedIndex\a\n\n\anniversary.csv">
           <value>
             <Attribute>
               <option name="separator" value=";" />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\InvertedIndex\a\n\n\anno.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
             </Attribute>
           </value>
         </entry>
@@ -116,6 +137,34 @@
           </value>
         </entry>
         <entry key="\InvertedIndex\n\a\t\nation.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\InvertedIndex\p\a\g\page.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\InvertedIndex\p\a\i\paid.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value=";" />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\InvertedIndex\p\a\r\paragraph.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value=";" />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\InvertedIndex\p\a\r\parallel.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />

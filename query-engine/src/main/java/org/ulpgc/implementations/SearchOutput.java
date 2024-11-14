@@ -6,18 +6,18 @@ import java.util.Map;
 
 public class SearchOutput implements Output {
     @Override
-    public void output(List<Map<String, Object>> results, String input) {
+    public void displayResults(List<Map<String, Object>> results, String input) {
         if (!results.isEmpty()) {
             System.out.println("\nResults for '" + input + "':");
             for (Map<String, Object> result : results) {
-                printer(result);
+                print(result);
             }
         } else {
             System.out.println("\nSorry! No results found for that word.");
         }
     }
 
-    private static void printer(Map<String, Object> result) {
+    private static void print(Map<String, Object> result) {
         System.out.println("Book Name: " + result.get("book_name"));
         System.out.println("Author: " + result.get("author_name"));
         System.out.println("URL: " + result.get("URL"));

@@ -1,5 +1,6 @@
 package org.ulpgc.apps;
 
+import org.ulpgc.control.Command;
 import org.ulpgc.control.SearchEngineCommand;
 import org.ulpgc.exceptions.QueryEngineException;
 import org.ulpgc.implementations.*;
@@ -9,18 +10,23 @@ import org.ulpgc.ports.Output;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-public class Main {
+public class MainWithAggregatedStructure {
     public static void main(String[] args) throws QueryEngineException {
-
         Path invertedIndexPath = Paths.get(System.getProperty("user.dir"), "InvertedIndex");
+        Path bookFolderPath = Paths.get(System.getProperty("user.dir"), "BookDatalake");
+        Path metadataPath = Paths.get(System.getProperty("user.dir"), "metadata.csv");
+
         Input input = new SearchInput();
         Output output = new SearchOutput();
-        InvertedIndexLoaderAggregated invertedIndex = new InvertedIndexLoaderAggregated();
-        MetadataCSVLoader metadataLoader = new MetadataCSVLoader();
-        QueryEngineAggregated queryEngine = new QueryEngineAggregated(metadataLoader, invertedIndexPath.toString());
-        SearchEngineCommand controller = new SearchEngineCommand(input, output, invertedIndex, metadataLoader, queryEngine);
+        QueryEngineAggregated queryEngine = new QueryEngineAggregated(
+                metadataPath.toString(),
+                bookFolderPath.toString(),
+                invertedIndexPath.toString()
+        );
+        Command searchEngineCommand = new SearchEngineCommand(input, output, queryEngine);
+
         try {
-            controller.execute();
+            searchEngineCommand.execute();
         } catch (QueryEngineException e) {
             throw new QueryEngineException(e.getMessage(), e);
         }
