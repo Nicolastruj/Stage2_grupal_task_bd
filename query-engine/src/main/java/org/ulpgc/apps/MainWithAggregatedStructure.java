@@ -3,7 +3,9 @@ package org.ulpgc.apps;
 import org.ulpgc.control.Command;
 import org.ulpgc.control.SearchEngineCommand;
 import org.ulpgc.exceptions.QueryEngineException;
-import org.ulpgc.implementations.*;
+import org.ulpgc.implementations.QueryEngineAggregated;
+import org.ulpgc.implementations.SearchInput;
+import org.ulpgc.implementations.SearchOutput;
 import org.ulpgc.ports.Input;
 import org.ulpgc.ports.Output;
 

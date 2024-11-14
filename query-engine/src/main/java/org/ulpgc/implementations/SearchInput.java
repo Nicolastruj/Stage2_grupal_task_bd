@@ -1,6 +1,7 @@
 package org.ulpgc.implementations;
 
 import org.ulpgc.ports.Input;
+
 import java.util.Scanner;
 
 public class SearchInput implements Input {
