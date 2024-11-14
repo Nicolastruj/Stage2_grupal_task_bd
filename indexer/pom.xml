@@ -24,7 +24,7 @@
                 <artifactId>exec-maven-plugin</artifactId>
                 <version>3.5.0</version>
                 <configuration>
-                    <mainClass>org.ulpgc.apps.IndexerMain</mainClass>
+                    <mainClass>org.ulpgc.apps.Main</mainClass>
                 </configuration>
             </plugin>
         </plugins>
