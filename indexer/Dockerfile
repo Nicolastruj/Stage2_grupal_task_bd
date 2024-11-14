@@ -21,5 +21,5 @@ WORKDIR /app
 COPY --from=build /app/target/indexer.jar indexer.jar
 
 # Comando para ejecutar la aplicación
-CMD ["java", "-cp", "indexer.jar", "software.guguel.apps.MainWithAggregatedStore"]
+CMD ["java", "-cp", "indexer.jar", "apps.org.ulpgc.MainWithAggregatedStore"]
 
