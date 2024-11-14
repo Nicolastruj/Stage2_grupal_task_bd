@@ -7,15 +7,12 @@ import java.util.*;
 public class InvertedIndexLoaderAggregated implements IndexLoader {
     @Override
     public Map<String, List<Integer>> loadWord(String word, String indexFolder) throws QueryEngineException {
-        // Create a path
         String path = constructFilePath(word, indexFolder);
-        // Check if the file of the word exists first
         File file = new File(path);
         if (!file.exists()) {
             return new HashMap<>();
         }
         Map<String, List<Integer>> wordIndex = new HashMap<>();
-        // Open the file if it exists
         findIndexedWord(path, wordIndex);
 
         return wordIndex;
@@ -44,7 +41,7 @@ public class InvertedIndexLoaderAggregated implements IndexLoader {
             int depth = Math.min(word.length(), 3);
             StringBuilder pathBuilder = new StringBuilder(indexFolder);
             for (int i = 0; i < depth; i++) {
-                pathBuilder.append("/").append(word.charAt(i));  // Add the first 1, 2 or 3 characters as subdirectories
+                pathBuilder.append("/").append(word.charAt(i));
             }
             // Always add the full word at the end
             pathBuilder.append("/").append(word).append(".csv");
