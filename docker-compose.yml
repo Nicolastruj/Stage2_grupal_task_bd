@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  crawler:
+    build:
+      context: ./crawler
+    volumes:
+      - datalake:/data/datalake
+      - metadata:/data/metadata
+    command: ["java", "-jar", "crawler.jar"]
+
+  indexer:
+    build:
+      context: ./indexer
+    volumes:
+      - datalake:/data/datalake
+      - datamart:/data/datamart
+    command: ["java", "-jar", "indexer.jar"]
+
+  query-engine:
+    build:
+      context: ./query-engine
+    volumes:
+      - datalake:/data/datalake
+      - metadata:/data/metadata
+      - datamart:/data/datamart
+    command: ["java", "-jar", "query-engine.jar"]
+
+volumes:
+  datalake:
+  metadata:
+  datamart:
