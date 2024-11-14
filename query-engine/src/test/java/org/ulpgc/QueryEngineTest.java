@@ -13,16 +13,17 @@ import java.util.concurrent.TimeUnit;
 @Fork(1)
 @Warmup(iterations = 1, time = 1)
 @Measurement(iterations = 5, time = 1)
-
 public class QueryEngineTest {
-    @State(Scope.Thread)
+
+    @State(Scope.Benchmark) // Cambia el alcance a Benchmark para asegurar la inicialización previa
     public static class QueryEnginePath {
-        public static Path bookDatalakePath;
-        public static Path invertedIndexPath;
-        public static Path metaDataPath;
+        public Path bookDatalakePath;
+        public Path invertedIndexPath;
+        public Path metaDataPath;
 
         @Param({"man", "immediate imminent"})
-        public static String[] word;
+        public String word;
+
         @Setup(Level.Trial)
         public void setup() {
             invertedIndexPath = Paths.get(System.getProperty("user.dir"), "..", "InvertedIndex");
@@ -32,14 +33,14 @@ public class QueryEngineTest {
     }
 
     @Benchmark
-    public void aggregateQueryEngine() {
+    public void aggregateQueryEngine(QueryEnginePath path) {
         QueryEngineAggregated queryEngine = new QueryEngineAggregated(
-                QueryEnginePath.metaDataPath.toString(),
-                QueryEnginePath.bookDatalakePath.toString(),
-                QueryEnginePath.invertedIndexPath.toString()
+                path.metaDataPath.toString(),
+                path.bookDatalakePath.toString(),
+                path.invertedIndexPath.toString()
         );
         try {
-            queryEngine.query(QueryEnginePath.word);
+            queryEngine.query(new String[]{path.word});  // Pasa la palabra como un arreglo de un solo elemento
         } catch (QueryEngineException e) {
             throw new RuntimeException(e);
         }
