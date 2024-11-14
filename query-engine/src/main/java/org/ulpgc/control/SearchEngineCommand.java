@@ -22,9 +22,9 @@ public class SearchEngineCommand implements Command{
         System.out.println("\nWelcome to the Search Engine!");
         System.out.println("If you want to exit the search engine, type 'EXIT'");
 
-        Path bookFolder = Paths.get(System.getProperty("user.dir"), "BookDatalake");
-        Path indexFolder = Paths.get(System.getProperty("user.dir"), "InvertedIndex");
-        Path metadataPath = Paths.get(System.getProperty("user.dir"), "metadata.csv");
+        Path bookFolder = Paths.get(System.getProperty("user.dir"), "..\BookDatalake");
+        Path indexFolder = Paths.get(System.getProperty("user.dir"), "..\InvertedIndex");
+        Path metadataPath = Paths.get(System.getProperty("user.dir"), "..\metadata.csv");
 
         InvertedIndexLoaderAggregated indexLoader = new InvertedIndexLoaderAggregated();
         MetadataCSVLoader metadataLoader = new MetadataCSVLoader();
