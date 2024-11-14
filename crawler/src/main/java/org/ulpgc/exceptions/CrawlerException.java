@@ -1,6 +1,6 @@
 package org.ulpgc.exceptions;
 
-public class CrawlerException extends Exception{
+public class CrawlerException extends Exception {
     public CrawlerException(String message) {
         super(message);
     }
@@ -9,3 +9,4 @@ public class CrawlerException extends Exception{
         super(message, cause);
     }
 }
+
