@@ -31,14 +31,12 @@ public class ExpandedHierarchicalCsvStore implements IndexerStore {
         }
     }
 
-
     public static void indexWord(String bookId, int position, String word) throws IndexerException {
         Path currentPath = invertedIndexPath;
 
         try {
             currentPath = getHierarchicalDirectoryPath(word, currentPath);
             Path filePath = getWordFilePath(word, currentPath);
-            initializeWordFileIfNotExists(filePath);
             writeWordInfoToFile(bookId, position, filePath);
 
         } catch (IOException e) {
@@ -51,7 +49,6 @@ public class ExpandedHierarchicalCsvStore implements IndexerStore {
         for (int i = 0; i < depth; i++) {
             String letter = String.valueOf(word.charAt(i));
             currentPath = currentPath.resolve(letter);
-
             createDirectoryIfNotExists(currentPath);
         }
         return currentPath;
@@ -71,16 +68,8 @@ public class ExpandedHierarchicalCsvStore implements IndexerStore {
         return currentPath.resolve(word + ".csv");
     }
 
-    private static void initializeWordFileIfNotExists(Path filePath) throws IOException {
-        if (!Files.exists(filePath)) {
-            String fileContent = "Book ID,Position\n";
-            Files.write(filePath, fileContent.getBytes());
-        }
-    }
-
     private static void writeWordInfoToFile(String bookId, int position, Path filePath) throws IOException {
         String csvEntry = bookId + "," + position + "\n";
-        Files.write(filePath, csvEntry.getBytes(), java.nio.file.StandardOpenOption.APPEND);
+        Files.write(filePath, csvEntry.getBytes(), java.nio.file.StandardOpenOption.CREATE, java.nio.file.StandardOpenOption.APPEND);
     }
-
 }

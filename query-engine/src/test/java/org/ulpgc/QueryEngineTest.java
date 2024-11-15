@@ -2,7 +2,7 @@ package org.ulpgc;
 
 import org.openjdk.jmh.annotations.*;
 import org.ulpgc.exceptions.QueryEngineException;
-import org.ulpgc.implementations.QueryEngineAggregated;
+import org.ulpgc.implementations.CommonQueryEngine;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -34,7 +34,7 @@ public class QueryEngineTest {
 
     @Benchmark
     public void aggregateQueryEngine(QueryEnginePath path) {
-        QueryEngineAggregated queryEngine = new QueryEngineAggregated(
+        CommonQueryEngine queryEngine = new CommonQueryEngine(
                 path.metaDataPath.toString(),
                 path.bookDatalakePath.toString(),
                 path.invertedIndexPath.toString()

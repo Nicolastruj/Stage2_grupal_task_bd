@@ -3,7 +3,7 @@ package org.ulpgc.apps;
 import org.ulpgc.control.Command;
 import org.ulpgc.control.SearchEngineCommand;
 import org.ulpgc.exceptions.QueryEngineException;
-import org.ulpgc.implementations.QueryEngineAggregated;
+import org.ulpgc.implementations.CommonQueryEngine;
 import org.ulpgc.implementations.SearchInput;
 import org.ulpgc.implementations.SearchOutput;
 import org.ulpgc.ports.Input;
@@ -12,7 +12,7 @@ import org.ulpgc.ports.Output;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-public class MainWithAggregatedStructure {
+public class MainCommonQueryEngine {
     public static void main(String[] args) throws QueryEngineException {
         Path invertedIndexPath = Paths.get(System.getProperty("user.dir"), "InvertedIndex");
         Path bookFolderPath = Paths.get(System.getProperty("user.dir"), "BookDatalake");
@@ -20,7 +20,7 @@ public class MainWithAggregatedStructure {
 
         Input input = new SearchInput();
         Output output = new SearchOutput();
-        QueryEngineAggregated queryEngine = new QueryEngineAggregated(
+        CommonQueryEngine queryEngine = new CommonQueryEngine(
                 metadataPath.toString(),
                 bookFolderPath.toString(),
                 invertedIndexPath.toString()

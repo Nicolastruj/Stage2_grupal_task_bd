@@ -9,12 +9,12 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class QueryEngineAggregated implements QueryEngine {
+public class CommonQueryEngine implements QueryEngine {
     private final String metadataPath;
     private final String bookFolder;
     private final String indexFolder;
 
-    public QueryEngineAggregated(String metadataPath, String bookFolder, String indexFolder) {
+    public CommonQueryEngine(String metadataPath, String bookFolder, String indexFolder) {
         this.metadataPath = metadataPath;
         this.bookFolder = bookFolder;
         this.indexFolder = indexFolder;
@@ -124,7 +124,7 @@ public class QueryEngineAggregated implements QueryEngine {
         while ((line = reader.readLine()) != null) {
             String[] parts = line.split(",");
             if (parts.length >= 4) {
-                metadata.put(parts[1], new Book(parts[1], parts[2], parts[3], parts[4]));
+                metadata.put(parts[0], new Book(parts[0], parts[2], parts[3], parts[4]));
             }
         }
         return metadata;
