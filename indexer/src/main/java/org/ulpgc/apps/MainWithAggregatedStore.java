@@ -15,8 +15,8 @@ import java.util.concurrent.TimeUnit;
 
 public class MainWithAggregatedStore {
     public static void main(String[] args) {
-        Path bookDatalakePath = Paths.get(System.getProperty("user.dir"), "BookDatalake");
-        Path invertedIndexPath = Paths.get(System.getProperty("user.dir"), "InvertedIndex");
+        Path bookDatalakePath = Paths.get(System.getProperty("user.dir"), "/data/datalake");
+        Path invertedIndexPath = Paths.get(System.getProperty("user.dir"), "/data/datamart");
         IndexerReader indexerReader = new GutenbergBookReader(bookDatalakePath.toString());
 
         IndexerStore hierarchicalCsvStore = new AggregatedHierarchicalCsvStore(invertedIndexPath);
