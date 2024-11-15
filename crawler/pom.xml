@@ -25,4 +25,16 @@
         </dependency>
     </dependencies>
 
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>3.5.0</version>
+                <configuration>
+                    <mainClass>org.ulpgc.apps.CrawlerMain</mainClass> <!-- Update with the correct main class -->
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>
