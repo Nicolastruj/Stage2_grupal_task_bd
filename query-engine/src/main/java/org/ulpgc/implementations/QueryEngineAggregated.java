@@ -211,6 +211,7 @@ public class QueryEngineAggregated implements QueryEngine {
             }
             return textBuilder.toString();
         }
+        
 
         private int processParagraph(String paragraph, Map<String, Pattern> wordPatterns, List<String> relevantParagraphs) {
             boolean paragraphAdded = false;

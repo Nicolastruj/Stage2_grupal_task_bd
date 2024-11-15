@@ -10,8 +10,6 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-// import org.ulpgc.implementations.ExpandedHierarchicalCsvStore;
-
 
 public class QueryEngineExpanded implements QueryEngine {
     private final String metadataPath;
@@ -23,6 +21,7 @@ public class QueryEngineExpanded implements QueryEngine {
         this.bookFolder = bookFolder;
         this.indexFolder = indexFolder;
     }
+
 
     @Override
     public List<Map<String, Object>> query(String[] words) throws QueryEngineException {
