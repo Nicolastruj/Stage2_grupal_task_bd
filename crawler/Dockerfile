@@ -1,20 +1,24 @@
-# Use OpenJDK 17 slim as the base image
+# Use a base image with Java
 FROM openjdk:17-jdk-slim
 
-# Set working directory
+# Set the working directory
 WORKDIR /app
 
-# Copy the Maven project files
-COPY pom.xml /app/
-COPY src /app/src/
+# Copy the entire project
+COPY ../../ ./
 
-# Install Maven, build the project, and clean up
-RUN apt-get update && apt-get install -y maven \
-    && mvn clean package -DskipTests \
-    && apt-get remove -y maven && apt-get autoremove -y
+# Build the entire project using Maven
+RUN apt-get update && \
+    apt-get install -y maven && \
+    mvn clean install -DskipTests && \
+    apt-get remove -y maven && \
+    apt-get autoremove -y
 
-# Define volumes for shared data
-VOLUME ["/data/datalake", "/data/metadata"]
+# Copy only the built artifacts for this module
+COPY target/crawler-1.0-SNAPSHOT.jar /app/crawler.jar
 
-# Set the entry point to run the application
-CMD ["java", "-jar", "target/crawler-1.0-SNAPSHOT.jar"]
+# Expose ports (if applicable)
+EXPOSE 8080
+
+# Set the entry point
+ENTRYPOINT ["java", "-jar", "/app/crawler.jar"]
