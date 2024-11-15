@@ -1,25 +1,58 @@
-# Fase de construcción con OpenJDK 21
+# Fase de construcción con OpenJDK y Maven
 FROM openjdk:21-jdk-slim AS build
+
+# Instalar Maven
+RUN apt-get update && apt-get install -y maven && rm -rf /var/lib/apt/lists/*
+
+# Establecer el directorio de trabajo en el contenedor
+WORKDIR /app
+# Fase de construcción con OpenJDK y Maven
+FROM openjdk:21-jdk-slim AS build
+
+# Instalar Maven
+RUN apt-get update && apt-get install -y maven && rm -rf /var/lib/apt/lists/*
 
 # Establecer el directorio de trabajo en el contenedor
 WORKDIR /app
 
-# Copiar el archivo pom.xml y la carpeta src desde el directorio del módulo 'indexer'
-COPY indexer/pom.xml ./
-COPY indexer/src ./indexer/src
+# Copiar el archivo POM principal
+COPY ../pom.xml /app/pom.xml
+# Copiar el proyecto completo al contenedor
+COPY . .
 
-# Construir el proyecto (se descargan las dependencias y se empaqueta)
-RUN mvn clean package -DskipTests  # Genera el JAR sin ejecutar las pruebas
+# Construir el módulo 'indexer' usando el perfil Maven que se pasa como argumento
+ARG PROFILE=expandedIndexer
+RUN mvn -pl indexer clean package -DskipTests -P$PROFILE
 
-# Fase final: crear la imagen ligera usando el JAR empaquetado
+# Fase final: crear la imagen ligera usando solo el JAR empaquetado
 FROM openjdk:21-jdk-slim
 
 # Establecer el directorio de trabajo en el contenedor
 WORKDIR /app
 
 # Copiar el archivo JAR empaquetado desde la fase de construcción
-COPY --from=build /app/target/indexer.jar indexer.jar
+COPY --from=build /app/indexer/target/indexer-1.0-SNAPSHOT.jar indexer.jar
 
 # Comando para ejecutar la aplicación
-CMD ["java", "-cp", "indexer.jar", "apps.org.ulpgc.MainWithAggregatedStore"]
+CMD ["java", "-jar", "indexer.jar"]
 
+# Copiar el archivo POM principal
+COPY ../pom.xml /app/pom.xml
+# Copiar el proyecto completo al contenedor
+COPY . .
+
+
+# Construir solo el módulo 'indexer'
+RUN mvn -pl indexer clean package -DskipTests
+
+# Fase final: crear la imagen ligera usando solo el JAR empaquetado
+FROM openjdk:21-jdk-slim
+
+# Establecer el directorio de trabajo en el contenedor
+WORKDIR /app
+
+# Copiar el archivo JAR empaquetado desde la fase de construcción
+COPY --from=build /app/indexer/target/indexer-1.0-SNAPSHOT.jar indexer.jar
+
+# Comando para ejecutar la aplicación
+CMD ["java", "-jar", "indexer.jar"]
