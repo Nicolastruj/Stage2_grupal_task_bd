@@ -20,11 +20,14 @@ public class MainWithExpandedStructure {
 
         Input input = new SearchInput();
         Output output = new SearchOutput();
+        
+        // Pass the Path object directly instead of converting it to a String
         QueryEngineExpanded queryEngine = new QueryEngineExpanded(
                 metadataPath.toString(),
                 bookFolderPath.toString(),
-                invertedIndexPath.toString()
+                invertedIndexPath
         );
+        
         Command searchEngineCommand = new SearchEngineCommand(input, output, queryEngine);
 
         try {
