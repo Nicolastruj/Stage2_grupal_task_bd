@@ -13,28 +13,35 @@ import java.net.URL;
 
 public class ReaderFromWeb implements ReaderFromWebInterface {
 
-    private static final int CONNECTION_TIMEOUT = 15000;
-    private static final int READ_TIMEOUT = 15000;
-
     @Override
     public InputStream downloadBookStream(int bookId) throws CrawlerException {
         String bookUrl = "https://www.gutenberg.org/files/" + bookId + "/" + bookId + "-0.txt";
         try {
             URL url = new URL(bookUrl);
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setRequestMethod("GET");
+            HttpURLConnection connection = getHttpURLConnection(url);
 
             int responseCode = connection.getResponseCode();
-            if (responseCode == HttpURLConnection.HTTP_OK) {
-                return connection.getInputStream();
-            } else if (responseCode == HttpURLConnection.HTTP_NOT_FOUND) {
-                return null; // Handle 404 as a normal case
-            } else {
-                throw new CrawlerException("HTTP error code: " + responseCode); // For other HTTP errors
-            }
+            return getResultFromHttpURLConnection(responseCode, connection);
         } catch (IOException e) {
             throw new CrawlerException("Error connecting to URL: " + bookUrl, e);
         }
+    }
+
+    private static InputStream getResultFromHttpURLConnection(int responseCode, HttpURLConnection connection)
+            throws IOException, CrawlerException {
+        if (responseCode == HttpURLConnection.HTTP_OK) {
+            return connection.getInputStream();
+        } else if (responseCode == HttpURLConnection.HTTP_NOT_FOUND) {
+            return null;
+        } else {
+            throw new CrawlerException("HTTP error code: " + responseCode);
+        }
+    }
+
+    private static HttpURLConnection getHttpURLConnection(URL url) throws IOException {
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        connection.setRequestMethod("GET");
+        return connection;
     }
 
     @Override
@@ -44,19 +51,29 @@ public class ReaderFromWeb implements ReaderFromWebInterface {
             Document doc = Jsoup.connect(bookUrl).get();
             Element h1Element = doc.selectFirst("h1");
 
-            if (h1Element != null) {
-                String titleAndAuthor = h1Element.text();
-                String[] parts = titleAndAuthor.split(" by ", 2);
-                String title = parts[0].replaceAll("[\\/:*?\"<>|]", "").replace(",", ";");
-                String author = (parts.length > 1 ? parts[1] : "Unknown Author").replaceAll("[\\/:*?\"<>|]", "").replace(",", ";");
-
-                return new String[]{title, author};
-            } else {
-                throw new CrawlerException("Title and author not found.");
-            }
+            return getBookMetadataFrom(h1Element);
         } catch (IOException e) {
             throw new CrawlerException("Error retrieving title and author: " + e.getMessage(), e);
         }
+    }
+
+    private static String[] getBookMetadataFrom(Element h1Element) throws CrawlerException {
+        if (h1Element != null) {
+            String titleAndAuthor = h1Element.text();
+            String[] parts = titleAndAuthor.split(" by ", 2);
+            String title = getBookAuthor(parts[0]);
+            String author = getBookAuthor((parts.length > 1 ? parts[1] : "Unknown Author"));
+
+            return new String[]{title, author};
+        } else {
+            throw new CrawlerException("Title and author not found.");
+        }
+    }
+
+    private static String getBookAuthor(String author) {
+        return author
+                .replaceAll("[/:*?\"<>|]", "")
+                .replace(",", ";");
     }
 }
 

@@ -11,15 +11,26 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class StoreInDatalake implements StoreInDatalakeInterface {
 
-    private static final String METADATA_FILE = "metadata.csv";
-    private static final AtomicInteger customIdCounter = new AtomicInteger(loadLastCustomId() + 1);
+    private final Path metadataPath;
+    private final AtomicInteger customIdCounter;
+
+    public StoreInDatalake(String metadataFilePath) {
+        this.metadataPath = Paths.get(metadataFilePath);
+        this.customIdCounter = new AtomicInteger(loadLastCustomId() + 1);
+    }
 
     @Override
     public int saveBook(InputStream bookStream, String title, String downloadDirectory) throws CrawlerException {
         int customId = customIdCounter.getAndIncrement();
-        String bookFileName = title + "_" + customId + ".txt";
+        String bookFileName = sanitizeFileName(title) + "_" + customId + ".txt";
         Path filePath = Paths.get(downloadDirectory, bookFileName);
 
+        saveBookInDatalake(bookStream, filePath);
+
+        return customId;
+    }
+
+    private static void saveBookInDatalake(InputStream bookStream, Path filePath) throws CrawlerException {
         try {
             Files.createDirectories(filePath.getParent());
             try (FileOutputStream fileOutputStream = new FileOutputStream(filePath.toFile())) {
@@ -32,33 +43,25 @@ public class StoreInDatalake implements StoreInDatalakeInterface {
         } catch (IOException e) {
             throw new CrawlerException("Failed to save book: " + e.getMessage(), e);
         }
-
-        return customId;
     }
 
     @Override
     public void saveMetadata(int customId, int gutenbergId, String title, String author, String url) throws CrawlerException {
         String metadataEntry = customId + "," + gutenbergId + "," + title + "," + author + "," + url + "\n";
 
-        try (FileWriter writer = new FileWriter(METADATA_FILE, true)) {
+        try (FileWriter writer = new FileWriter(metadataPath.toFile(), true)) {
             writer.write(metadataEntry);
         } catch (IOException e) {
             throw new CrawlerException("Failed to write metadata: " + e.getMessage(), e);
         }
     }
 
-    private static int loadLastCustomId() {
+    private int loadLastCustomId() {
         int lastId = 0;
-        Path path = Paths.get(METADATA_FILE);
 
-        if (Files.exists(path)) {
-            try (BufferedReader reader = new BufferedReader(new FileReader(METADATA_FILE))) {
-                String line;
-                String lastLine = null;
-
-                while ((line = reader.readLine()) != null) {
-                    lastLine = line;
-                }
+        if (Files.exists(metadataPath)) {
+            try (BufferedReader reader = new BufferedReader(new FileReader(metadataPath.toFile()))) {
+                String lastLine = getLastLine(reader);
 
                 if (lastLine != null) {
                     String[] fields = lastLine.split(",");
@@ -70,6 +73,17 @@ public class StoreInDatalake implements StoreInDatalakeInterface {
         }
         return lastId;
     }
+
+    private String sanitizeFileName(String fileName) {
+        return fileName.replaceAll("[<>:\"/|?*]", "_");
+    }
+
+    private static String getLastLine(BufferedReader reader) throws IOException {
+        String lastLine = null;
+        String line;
+        while ((line = reader.readLine()) != null) {
+            lastLine = line;
+        }
+        return lastLine;
+    }
 }
-
-
