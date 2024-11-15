@@ -1,7 +1,7 @@
 package org.ulpgc.control;
 
 import org.ulpgc.exceptions.QueryEngineException;
-import org.ulpgc.implementations.QueryEngineAggregated;
+import org.ulpgc.implementations.QueryEngineExpanded;
 import org.ulpgc.ports.Input;
 import org.ulpgc.ports.Output;
 
@@ -12,9 +12,9 @@ import java.util.Map;
 public class SearchEngineCommand implements Command {
     private final Input input;
     private final Output outputInterface;
-    private final QueryEngineAggregated queryEngine;
+    private final QueryEngineExpanded queryEngine;
 
-    public SearchEngineCommand(Input inputInterface, Output outputInterface, QueryEngineAggregated queryEngine) {
+    public SearchEngineCommand(Input inputInterface, Output outputInterface, QueryEngineExpanded queryEngine) {
         this.input = inputInterface;
         this.outputInterface = outputInterface;
         this.queryEngine = queryEngine;
