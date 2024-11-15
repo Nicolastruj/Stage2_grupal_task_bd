@@ -21,7 +21,7 @@
         <dependency>
             <groupId>org.jsoup</groupId>
             <artifactId>jsoup</artifactId>
-            <version>1.16.1</version> <!-- Use the latest version -->
+            <version>1.16.1</version>
         </dependency>
     </dependencies>
 
@@ -32,7 +32,7 @@
                 <artifactId>exec-maven-plugin</artifactId>
                 <version>3.5.0</version>
                 <configuration>
-                    <mainClass>org.ulpgc.apps.CrawlerMain</mainClass> <!-- Update with the correct main class -->
+                    <mainClass>org.ulpgc.apps.Main</mainClass>
                 </configuration>
             </plugin>
         </plugins>
