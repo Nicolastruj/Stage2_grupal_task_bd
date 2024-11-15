@@ -7,7 +7,7 @@ services:
     volumes:
       - datalake:/data/datalake
       - metadata:/data/metadata
-    command: ["java", "-jar", "crawler.jar"]
+    command: ["java", "-jar", "crawler-1.0-SNAPSHOT.jar"]
 
   indexer:
     build:
@@ -15,7 +15,7 @@ services:
     volumes:
       - datalake:/data/datalake
       - datamart:/data/datamart
-    command: ["java", "-jar", "indexer.jar"]
+    command: ["java", "-jar", "indexer-1.0-SNAPSHOT.jar"]
 
   query-engine:
     build:
@@ -24,7 +24,7 @@ services:
       - datalake:/data/datalake
       - metadata:/data/metadata
       - datamart:/data/datamart
-    command: ["java", "-jar", "query-engine.jar"]
+    command: ["java", "-jar", "query-engine-1.0-SNAPSHOT.jar"]
 
 volumes:
   datalake:

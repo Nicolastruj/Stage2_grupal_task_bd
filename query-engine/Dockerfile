@@ -1,24 +1,26 @@
-# Fase de construcción con OpenJDK 21
+# Build phase with OpenJDK 21
 FROM openjdk:21-jdk-slim AS build
 
-# Establecer el directorio de trabajo en el contenedor
+# Set working directory
 WORKDIR /app
 
-# Copiar el archivo pom.xml y la carpeta src desde el directorio del módulo 'query-engine'
-COPY query-engine/pom.xml ./
-COPY query-engine/src ./query-engine/src
+# Copy Maven project files
+COPY pom.xml ./ 
+COPY src ./src/
 
-# Construir el proyecto (se descargan las dependencias y se empaqueta)
-RUN mvn clean package -DskipTests  # Genera el JAR sin ejecutar las pruebas
+# Install Maven, build the project, and clean up
+RUN apt-get update && apt-get install -y maven \
+    && mvn clean package -DskipTests \
+    && apt-get remove -y maven && apt-get autoremove -y
 
-# Fase final: crear la imagen ligera usando el JAR empaquetado
+# Final phase: create a lightweight image with the JAR
 FROM openjdk:21-jdk-slim
 
-# Establecer el directorio de trabajo en el contenedor
+# Set working directory
 WORKDIR /app
 
-# Copiar el archivo JAR empaquetado desde la fase de construcción
-COPY --from=build /app/target/query-engine.jar query-engine.jar
+# Copy the built JAR from the build phase
+COPY --from=build /app/target/query-engine-1.0-SNAPSHOT.jar query-engine.jar
 
-# Comando para ejecutar la aplicación
+# Command to run the application
 CMD ["java", "-jar", "query-engine.jar"]

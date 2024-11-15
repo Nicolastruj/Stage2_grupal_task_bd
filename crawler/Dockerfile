@@ -1,24 +1,20 @@
-# Fase de construcción con OpenJDK 21
-FROM openjdk:21-jdk-slim AS build
+# Use OpenJDK 17 slim as the base image
+FROM openjdk:17-jdk-slim
 
-# Establecer el directorio de trabajo en el contenedor
+# Set working directory
 WORKDIR /app
 
-# Copiar el archivo pom.xml y la carpeta src desde el directorio del módulo 'crawler'
-COPY crawler/pom.xml ./
-COPY crawler/src ./crawler/src
+# Copy the Maven project files
+COPY pom.xml /app/
+COPY src /app/src/
 
-# Construir el proyecto (se descargan las dependencias y se empaqueta)
-RUN mvn clean package -DskipTests  # Genera el JAR sin ejecutar las pruebas
+# Install Maven, build the project, and clean up
+RUN apt-get update && apt-get install -y maven \
+    && mvn clean package -DskipTests \
+    && apt-get remove -y maven && apt-get autoremove -y
 
-# Fase final: crear la imagen ligera usando el JAR empaquetado
-FROM openjdk:21-jdk-slim
+# Define volumes for shared data
+VOLUME ["/data/datalake", "/data/metadata"]
 
-# Establecer el directorio de trabajo en el contenedor
-WORKDIR /app
-
-# Copiar el archivo JAR empaquetado desde la fase de construcción
-COPY --from=build /app/target/crawler.jar crawler.jar
-
-# Comando para ejecutar la aplicación
-CMD ["java", "-jar", "crawler.jar"]
+# Set the entry point to run the application
+CMD ["java", "-jar", "target/crawler-1.0-SNAPSHOT.jar"]
