@@ -17,9 +17,10 @@ public class MainWithExpandedStore {
     public static void main(String[] args) {
         Path bookDatalakePath = Paths.get(System.getProperty("user.dir"), "BookDatalake");
         Path invertedIndexPath = Paths.get(System.getProperty("user.dir"), "InvertedIndex");
+        Path stopWordsPath = Paths.get(System.getProperty("user.dir"), "indexer/src/main/resources/stopwords.txt");
         IndexerReader indexerReader = new GutenbergBookReader(bookDatalakePath.toString());
 
-        IndexerStore hierarchicalCsvStore = new ExpandedHierarchicalCsvStore(invertedIndexPath);
+        IndexerStore hierarchicalCsvStore = new ExpandedHierarchicalCsvStore(invertedIndexPath, stopWordsPath);
         IndexerCommand hierarchicalCsvController = new IndexerCommand(indexerReader, hierarchicalCsvStore);
         ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
