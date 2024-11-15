@@ -4,6 +4,7 @@ services:
   crawler:
     build:
       context: ./crawler
+      dockerfile: Dockerfile
     volumes:
       - datalake:/data/datalake
       - metadata:/data/metadata
@@ -12,6 +13,7 @@ services:
   indexer:
     build:
       context: ./indexer
+      dockerfile: Dockerfile
     volumes:
       - datalake:/data/datalake
       - datamart:/data/datamart
@@ -20,6 +22,7 @@ services:
   query-engine:
     build:
       context: ./query-engine
+      dockerfile: Dockerfile
     volumes:
       - datalake:/data/datalake
       - metadata:/data/metadata
