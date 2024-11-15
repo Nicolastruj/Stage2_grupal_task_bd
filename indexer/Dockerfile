@@ -1,14 +1,13 @@
-# Build phase with OpenJDK 21
+# Build phase
 FROM openjdk:21-jdk-slim AS build
 
 # Set working directory
 WORKDIR /app
 
-# Copy Maven project files
-COPY pom.xml ./ 
-COPY src ./src/
+# Copy only the `indexer` module
+COPY ./ ./
 
-# Install Maven, build the project, and clean up
+# Install Maven, build the `indexer` module, and clean up
 RUN apt-get update && apt-get install -y maven \
     && mvn clean package -DskipTests \
     && apt-get remove -y maven && apt-get autoremove -y

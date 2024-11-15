@@ -7,8 +7,7 @@ services:
       dockerfile: Dockerfile
     volumes:
       - datalake:/data/datalake
-      - metadata:/data/metadata
-    command: ["java", "-jar", "crawler-1.0-SNAPSHOT.jar"]
+    command: ["java", "-jar", "crawler.jar"]
 
   indexer:
     build:
@@ -17,17 +16,16 @@ services:
     volumes:
       - datalake:/data/datalake
       - datamart:/data/datamart
-    command: ["java", "-jar", "indexer-1.0-SNAPSHOT.jar"]
+    command: ["java", "-jar", "indexer.jar"]
 
   query-engine:
     build:
       context: ./query-engine
       dockerfile: Dockerfile
     volumes:
-      - datalake:/data/datalake
       - metadata:/data/metadata
       - datamart:/data/datamart
-    command: ["java", "-jar", "query-engine-1.0-SNAPSHOT.jar"]
+    command: ["java", "-jar", "query-engine.jar"]
 
 volumes:
   datalake:
