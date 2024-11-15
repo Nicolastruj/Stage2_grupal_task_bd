@@ -10,6 +10,9 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+// import org.ulpgc.implementations.ExpandedHierarchicalCsvStore;
+
+
 public class QueryEngineExpanded implements QueryEngine {
     private final String metadataPath;
     private final String bookFolder;
@@ -59,7 +62,7 @@ public class QueryEngineExpanded implements QueryEngine {
     }
 
     private Path constructWordFilePath(String word) {
-        int depth = Math.min(word.length(), ExpandedHierarchicalCsvStore.maxDepth);
+        int depth = Math.min(word.length(), 3); // max depth = 3
         Path path = indexFolder;
         for (int i = 0; i < depth; i++) {
             path = path.resolve(String.valueOf(word.charAt(i)));
