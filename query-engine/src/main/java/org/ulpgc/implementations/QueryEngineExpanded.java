@@ -5,6 +5,7 @@ import org.ulpgc.model.Book;
 import org.ulpgc.model.QueryEngine;
 
 import java.io.*;
+import java.nio.file.*;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -12,9 +13,9 @@ import java.util.regex.Pattern;
 public class QueryEngineExpanded implements QueryEngine {
     private final String metadataPath;
     private final String bookFolder;
-    private final String indexFolder;
+    private final Path indexFolder;
 
-    public QueryEngineExpanded(String metadataPath, String bookFolder, String indexFolder) {
+    public QueryEngineExpanded(String metadataPath, String bookFolder, Path indexFolder) {
         this.metadataPath = metadataPath;
         this.bookFolder = bookFolder;
         this.indexFolder = indexFolder;
@@ -45,37 +46,38 @@ public class QueryEngineExpanded implements QueryEngine {
     }
 
     private Map<String, List<Integer>> getIndexedInfoOf(String word) throws QueryEngineException {
-        word = word.trim();
+        word = word.trim().toLowerCase();
         return loadIndexedWordInfo(word);
     }
 
     private Map<String, List<Integer>> loadIndexedWordInfo(String word) throws QueryEngineException {
-        String wordFilePath = constructWordFilePath(word, indexFolder);
-        File file = new File(wordFilePath);
-
-        if (!file.exists()) {
+        Path wordFilePath = constructWordFilePath(word);
+        if (!Files.exists(wordFilePath)) {
             return null;
         }
-
         return getWordIndex(wordFilePath);
     }
 
-    private String constructWordFilePath(String word, String indexFolder) {
-        int depth = Math.min(word.length(), 3);
-        StringBuilder pathBuilder = new StringBuilder(indexFolder);
+    private Path constructWordFilePath(String word) {
+        int depth = Math.min(word.length(), ExpandedHierarchicalCsvStore.maxDepth);
+        Path path = indexFolder;
         for (int i = 0; i < depth; i++) {
-            pathBuilder.append("/").append(word.charAt(i));
+            path = path.resolve(String.valueOf(word.charAt(i)));
         }
-        pathBuilder.append("/").append(word).append(".csv");
-        return pathBuilder.toString();
+        return path.resolve(word + ".csv");
     }
 
-    private static Map<String, List<Integer>> getWordIndex(String wordFilePath) throws QueryEngineException {
+    private static Map<String, List<Integer>> getWordIndex(Path wordFilePath) throws QueryEngineException {
         Map<String, List<Integer>> wordIndex = new HashMap<>();
-        try (BufferedReader reader = new BufferedReader(new FileReader(wordFilePath))) {
+        try (BufferedReader reader = Files.newBufferedReader(wordFilePath)) {
             String line;
+            reader.readLine(); // Skip the header line
             while ((line = reader.readLine()) != null) {
-                getWordInfo(line, wordIndex);
+                String[] parts = line.split(",");
+                if (parts.length < 2) continue;
+                String bookId = parts[0];
+                List<Integer> positions = getWordPositions(parts[1]);
+                wordIndex.put(bookId, positions);
             }
         } catch (IOException e) {
             throw new QueryEngineException("Error reading index file", e);
@@ -83,17 +85,9 @@ public class QueryEngineExpanded implements QueryEngine {
         return wordIndex;
     }
 
-    private static void getWordInfo(String line, Map<String, List<Integer>> wordIndex) {
-        String[] parts = line.split(",");
-        if (parts.length < 2) return;
-        String bookId = parts[0];
-        List<Integer> positions = getWordPositions(parts);
-        wordIndex.put(bookId, positions);
-    }
-
-    private static List<Integer> getWordPositions(String[] parts) {
+    private static List<Integer> getWordPositions(String positionsPart) {
         List<Integer> positions = new ArrayList<>();
-        for (String pos : parts[1].split(";")) {
+        for (String pos : positionsPart.split(";")) {
             positions.add(Integer.parseInt(pos));
         }
         return positions;
@@ -133,7 +127,7 @@ public class QueryEngineExpanded implements QueryEngine {
     private void getResults(String[] words, Set<String> commonBooks, Map<String, Book> metadataMap, List<Map<String, Object>> results) throws QueryEngineException {
         for (String bookId : commonBooks) {
             Book metadata = metadataMap.get(bookId);
-            if (metadataNotExists(bookId, metadata)) continue;
+            if (metadata == null) continue;
 
             String bookPath = String.format("%s/%s_%s.txt", bookFolder, metadata.name(), bookId);
             Map<String, Object> extractedData = new ParagraphExtractor().findParagraphs(bookPath, words);
@@ -141,14 +135,6 @@ public class QueryEngineExpanded implements QueryEngine {
             int occurrences = (int) extractedData.get("occurrences");
             addResultsInfo(paragraphs, metadata, occurrences, results);
         }
-    }
-
-    private static boolean metadataNotExists(String bookId, Book metadata) {
-        if (metadata == null) {
-            System.out.println("Metadata for book ID '" + bookId + "' not found.");
-            return true;
-        }
-        return false;
     }
 
     private static void addResultsInfo(List<String> paragraphs, Book metadata, int occurrences, List<Map<String, Object>> results) {
@@ -165,13 +151,10 @@ public class QueryEngineExpanded implements QueryEngine {
     }
 
     public static class ParagraphExtractor {
-
-
         public Map<String, Object> findParagraphs(String bookPath, String[] searchWords) throws QueryEngineException {
             Map<String, Object> result = new HashMap<>();
             List<String> relevantParagraphs = new ArrayList<>();
             int totalOccurrences = 0;
-
             Map<String, Pattern> wordPatterns = createWordPatterns(searchWords);
 
             try (BufferedReader reader = new BufferedReader(new FileReader(bookPath))) {
@@ -245,8 +228,5 @@ public class QueryEngineExpanded implements QueryEngine {
         private void highlightMatch(Matcher matcher, StringBuilder highlightedBuffer) {
             matcher.appendReplacement(highlightedBuffer, "\033[34m" + matcher.group() + "\033[0m");
         }
-
-
     }
-
 }
