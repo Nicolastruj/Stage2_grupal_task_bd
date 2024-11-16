@@ -3,6 +3,7 @@ RUN apt-get update && apt-get install -y maven && rm -rf /var/lib/apt/lists/*
 WORKDIR /app
 COPY ../pom.xml /app/pom.xml
 COPY . .
+COPY indexer/src/main/resources/stopwords.txt /app/data/stopwords/stopwords.txt
 ARG PROFILE=expandedIndexer
 RUN mvn -pl indexer clean package -DskipTests -P$PROFILE
 

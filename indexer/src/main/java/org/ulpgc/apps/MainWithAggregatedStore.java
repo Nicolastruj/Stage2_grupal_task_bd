@@ -16,16 +16,12 @@ import java.util.concurrent.TimeUnit;
 
 public class MainWithAggregatedStore {
     public static void main(String[] args) throws IndexerException {
-        Path bookDatalakePath = Paths.get(System.getProperty("user.dir"), "BookDatalake");
-        Path invertedIndexPath = Paths.get(System.getProperty("user.dir"), "InvertedIndex");
-        Path stopWordsPath;
-        try {
-            stopWordsPath = Paths.get(MainWithAggregatedStore.class.getClassLoader()
-                    .getResource("stopwords.txt").toURI());
-        } catch (URISyntaxException e) {
-            throw new IndexerException(e.getMessage(), e);
-        }
-        IndexerReader indexerReader = new GutenbergBookReader(bookDatalakePath.toString());
+        Path datalakePath = Paths.get(System.getProperty("user.dir"), "/data/datalake").normalize();
+        Path invertedIndexPath = Paths.get(System.getProperty("user.dir"), "/data/datamart").normalize();
+        // TODO hacerlo con listas si no lo sacan con fichero
+        Path stopWordsPath = Paths.get(System.getProperty("user.dir"), "/data/stopwords/stopwords.txt");
+
+        IndexerReader indexerReader = new GutenbergBookReader(datalakePath.toString());
 
         IndexerStore hierarchicalCsvStore = new AggregatedHierarchicalCsvStore(invertedIndexPath, stopWordsPath);
         IndexerCommand hierarchicalCsvController = new IndexerCommand(indexerReader, hierarchicalCsvStore);

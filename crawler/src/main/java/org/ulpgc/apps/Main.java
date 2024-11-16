@@ -16,8 +16,8 @@ import java.util.concurrent.TimeUnit;
 
 public class Main {
     public static void main(String[] args) {
-        Path datalakePath = Paths.get(System.getProperty("user.dir"), "BookDatalake").normalize();
-        Path metadataPath = Paths.get(System.getProperty("user.dir"), "metadata.csv").normalize();
+        Path datalakePath = Paths.get(System.getProperty("user.dir"), "/data/datalake").normalize();
+        Path metadataPath = Paths.get(System.getProperty("user.dir"), "/data/metadata/metadata.csv").normalize();
 
         ReaderFromWebInterface reader = new ReaderFromWeb();
         StoreInDatalakeInterface store = new StoreInDatalake(metadataPath.toString());
