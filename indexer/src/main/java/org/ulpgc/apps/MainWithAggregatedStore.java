@@ -7,7 +7,6 @@ import org.ulpgc.implementations.GutenbergBookReader;
 import org.ulpgc.ports.IndexerReader;
 import org.ulpgc.ports.IndexerStore;
 
-import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.concurrent.Executors;
@@ -15,16 +14,11 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 public class MainWithAggregatedStore {
-    public static void main(String[] args) throws IndexerException {
-        Path bookDatalakePath = Paths.get(System.getProperty("user.dir"), "BookDatalake");
-        Path invertedIndexPath = Paths.get(System.getProperty("user.dir"), "InvertedIndex");
-        Path stopWordsPath;
-        try {
-            stopWordsPath = Paths.get(MainWithAggregatedStore.class.getClassLoader()
-                    .getResource("stopwords.txt").toURI());
-        } catch (URISyntaxException e) {
-            throw new IndexerException(e.getMessage(), e);
-        }
+    public static void main(String[] args) {
+        Path bookDatalakePath = Paths.get(System.getProperty("user.dir"), "/data/datalake");
+        Path invertedIndexPath = Paths.get(System.getProperty("user.dir"), "/data/datamart");
+        Path stopWordsPath = Paths.get("/app/resources/stopwords.txt");
+
         IndexerReader indexerReader = new GutenbergBookReader(bookDatalakePath.toString());
 
         IndexerStore hierarchicalCsvStore = new AggregatedHierarchicalCsvStore(invertedIndexPath, stopWordsPath);
@@ -37,6 +31,6 @@ public class MainWithAggregatedStore {
             } catch (IndexerException e) {
                 throw new RuntimeException("Error while indexing books.", e);
             }
-        }, 0, 10, TimeUnit.MINUTES);
+        }, 0, 20, TimeUnit.MINUTES);
     }
 }
