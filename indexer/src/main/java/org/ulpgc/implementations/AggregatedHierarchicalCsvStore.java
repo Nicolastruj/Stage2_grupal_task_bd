@@ -4,6 +4,7 @@ import org.ulpgc.exceptions.IndexerException;
 import org.ulpgc.model.Book;
 import org.ulpgc.ports.IndexerStore;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -14,10 +15,13 @@ import java.util.stream.Collectors;
 public class AggregatedHierarchicalCsvStore implements IndexerStore {
 
     private static Path invertedIndexPath;
+    private static Path loadStopWords;
     private static final int maxDepth = 3;
+    private static final Set<String> stopWords = new HashSet<>();
 
-    public AggregatedHierarchicalCsvStore(Path invertedIndexPath) {
+    public AggregatedHierarchicalCsvStore(Path invertedIndexPath, Path stopWordsFilePath) {
         AggregatedHierarchicalCsvStore.invertedIndexPath = invertedIndexPath;
+        loadStopWords(stopWordsFilePath);
     }
 
     @Override
@@ -27,13 +31,23 @@ public class AggregatedHierarchicalCsvStore implements IndexerStore {
         String[] words = content.split("\\W+");
 
         for (int i = 0; i < words.length; i++) {
-            String word = words[i];
-            if (!word.isEmpty()) {
-                indexWord(book.bookId(), i, word.toLowerCase());
+            String word = words[i].toLowerCase();
+            if (!word.isEmpty() && !stopWords.contains(word)) {
+                indexWord(book.bookId(), i, word);
             }
         }
     }
 
+    private static void loadStopWords(Path stopWordsFilePath) {
+        try (BufferedReader reader = Files.newBufferedReader(stopWordsFilePath)) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                stopWords.add(line.trim().toLowerCase());
+            }
+        } catch (IOException e) {
+            System.err.println("Error loading stop words: " + e.getMessage());
+        }
+    }
 
     public static void indexWord(String bookId, int position, String word) throws IndexerException {
         Path currentPath = invertedIndexPath;

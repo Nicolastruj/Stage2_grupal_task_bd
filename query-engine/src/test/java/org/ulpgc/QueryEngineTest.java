@@ -3,6 +3,7 @@ package org.ulpgc;
 import org.openjdk.jmh.annotations.*;
 import org.ulpgc.exceptions.QueryEngineException;
 import org.ulpgc.implementations.CommonQueryEngine;
+import org.ulpgc.model.QueryEngine;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -15,7 +16,7 @@ import java.util.concurrent.TimeUnit;
 @Measurement(iterations = 5, time = 1)
 public class QueryEngineTest {
 
-    @State(Scope.Benchmark) // Cambia el alcance a Benchmark para asegurar la inicialización previa
+    @State(Scope.Benchmark)
     public static class QueryEnginePath {
         public Path bookDatalakePath;
         public Path invertedIndexPath;
@@ -33,14 +34,14 @@ public class QueryEngineTest {
     }
 
     @Benchmark
-    public void aggregateQueryEngine(QueryEnginePath path) {
-        CommonQueryEngine queryEngine = new CommonQueryEngine(
+    public void benchmarkQueryEngine(QueryEnginePath path) {
+        QueryEngine queryEngine = new CommonQueryEngine(
                 path.metaDataPath.toString(),
                 path.bookDatalakePath.toString(),
                 path.invertedIndexPath.toString()
         );
         try {
-            queryEngine.query(new String[]{path.word});  // Pasa la palabra como un arreglo de un solo elemento
+            queryEngine.query(new String[]{path.word});
         } catch (QueryEngineException e) {
             throw new RuntimeException(e);
         }

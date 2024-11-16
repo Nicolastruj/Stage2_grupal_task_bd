@@ -18,17 +18,19 @@ import java.util.concurrent.TimeUnit;
 @Fork(1)
 @Warmup(iterations = 1, time = 1)
 @Measurement(iterations = 5, time = 1)
-public class AggregatedIndexer {
+public class IndexerTest {
 
     @State(Scope.Thread)
     public static class IndexerPath {
         public Path bookDatalakePath;
         public Path invertedIndexPath;
+        public Path stopWordsPath;
 
         @Setup(Level.Trial)
         public void setup() {
             bookDatalakePath = Paths.get(System.getProperty("user.dir"), "..", "BookDatalake").normalize();
             invertedIndexPath = Paths.get(System.getProperty("user.dir"), "..", "InvertedIndex").normalize();
+            stopWordsPath = Paths.get(System.getProperty("user.dir"), "indexer/src/main/resources/stopwords.txt");
 
         }
     }
@@ -36,7 +38,7 @@ public class AggregatedIndexer {
     @Benchmark
     public void aggregatedIndexer(IndexerPath path) throws IndexerException {
         IndexerReader indexerReader = new GutenbergBookReader(path.bookDatalakePath.toString());
-        IndexerStore hierarchicalCsvStore = new AggregatedHierarchicalCsvStore(path.invertedIndexPath);
+        IndexerStore hierarchicalCsvStore = new AggregatedHierarchicalCsvStore(path.invertedIndexPath, path.stopWordsPath);
         IndexerCommand hierarchicalCsvController = new IndexerCommand(indexerReader, hierarchicalCsvStore);
         hierarchicalCsvController.execute();
     }
@@ -44,7 +46,7 @@ public class AggregatedIndexer {
     @Benchmark
     public void expandedIndexer(IndexerPath path) throws IndexerException {
         IndexerReader indexerReader = new GutenbergBookReader(path.bookDatalakePath.toString());
-        IndexerStore hierarchicalCsvStore = new ExpandedHierarchicalCsvStore(path.invertedIndexPath);
+        IndexerStore hierarchicalCsvStore = new ExpandedHierarchicalCsvStore(path.invertedIndexPath, path.stopWordsPath);
         IndexerCommand hierarchicalCsvController = new IndexerCommand(indexerReader, hierarchicalCsvStore);
         hierarchicalCsvController.execute();
     }
