@@ -1,12 +1,12 @@
 package ulpgc;
 
 import org.openjdk.jmh.annotations.*;
-import org.ulpgc.control.Command;
-import org.ulpgc.control.CrawlerCommand;
-import org.ulpgc.implementations.ReaderFromWeb;
-import org.ulpgc.implementations.StoreInDatalake;
-import org.ulpgc.ports.ReaderFromWebInterface;
-import org.ulpgc.ports.StoreInDatalakeInterface;
+import software.cheeselooker.control.Command;
+import software.cheeselooker.control.CrawlerCommand;
+import software.cheeselooker.implementations.ReaderFromWeb;
+import software.cheeselooker.implementations.StoreInDatalake;
+import software.cheeselooker.ports.ReaderFromWebInterface;
+import software.cheeselooker.ports.StoreInDatalakeInterface;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
