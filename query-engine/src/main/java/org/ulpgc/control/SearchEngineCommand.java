@@ -30,7 +30,8 @@ public class SearchEngineCommand implements Command {
 
     private void processSearch() throws QueryEngineException {
         while (true) {
-            String searchInput = input.getSearchText();
+            // String searchInput = input.getSearchText();
+            String searchInput = "Home";
             String[] words = searchInput.split("\\s+");
 
             if (exitMode(words)) return;

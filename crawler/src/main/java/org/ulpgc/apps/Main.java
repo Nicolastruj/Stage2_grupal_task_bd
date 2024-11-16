@@ -7,6 +7,7 @@ import org.ulpgc.implementations.StoreInDatalake;
 import org.ulpgc.ports.ReaderFromWebInterface;
 import org.ulpgc.ports.StoreInDatalakeInterface;
 
+import java.io.Console;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.concurrent.Executors;
@@ -30,6 +31,8 @@ public class Main {
     private static void periodicTask(ScheduledExecutorService scheduler, Command crawlerCommand) {
         scheduler.scheduleAtFixedRate(() -> {
             System.out.println("Starting download process...");
+            String sharedPath = System.getenv("SHARED_VOLUME_PATH");
+            System.out.println(sharedPath);
             crawlerCommand.download();
         }, 0, 20, TimeUnit.SECONDS);
     }
