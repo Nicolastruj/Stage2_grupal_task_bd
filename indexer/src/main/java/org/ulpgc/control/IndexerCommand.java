@@ -15,7 +15,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Stream;
 
-// TODO review exceptions
 public class IndexerCommand implements Command{
     private final IndexerReader indexerReader;
     private final IndexerStore indexerStore;

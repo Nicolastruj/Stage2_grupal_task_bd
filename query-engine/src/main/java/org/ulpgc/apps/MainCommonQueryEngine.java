@@ -14,15 +14,15 @@ import java.nio.file.Paths;
 
 public class MainCommonQueryEngine {
     public static void main(String[] args) throws QueryEngineException {
-        Path invertedIndexPath = Paths.get(System.getProperty("user.dir"), "/data/datamart");
-        Path bookFolderPath = Paths.get(System.getProperty("user.dir"), "/data/datalake");
-        Path metadataPath = Paths.get(System.getProperty("user.dir"), "/data/metadata/metadata.csv");
+        Path bookDatalakePath = Paths.get(System.getProperty("user.dir"), "BookDatalake");
+        Path invertedIndexPath = Paths.get(System.getProperty("user.dir"), "InvertedIndex");
+        Path metadataPath = Paths.get(System.getProperty("user.dir"), "metadata.csv");
 
         Input input = new SearchInput();
         Output output = new SearchOutput();
         CommonQueryEngine queryEngine = new CommonQueryEngine(
                 metadataPath.toString(),
-                bookFolderPath.toString(),
+                bookDatalakePath.toString(),
                 invertedIndexPath.toString()
         );
         Command searchEngineCommand = new SearchEngineCommand(input, output, queryEngine);

@@ -19,7 +19,6 @@
     </properties>
 
     <dependencies>
-        <!-- Dependencias de JavaFX -->
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-controls</artifactId>
@@ -34,7 +33,6 @@
 
     <build>
         <plugins>
-            <!-- Plugin para empaquetar el JAR -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
@@ -48,7 +46,6 @@
                 </configuration>
             </plugin>
 
-            <!-- Plugin para empaquetar dependencias en un JAR único -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>

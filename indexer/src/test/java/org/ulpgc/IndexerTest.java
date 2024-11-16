@@ -1,6 +1,7 @@
 package org.ulpgc;
 
 import org.openjdk.jmh.annotations.*;
+import org.ulpgc.apps.MainWithAggregatedStore;
 import org.ulpgc.control.IndexerCommand;
 import org.ulpgc.exceptions.IndexerException;
 import org.ulpgc.implementations.AggregatedHierarchicalCsvStore;
@@ -9,6 +10,7 @@ import org.ulpgc.implementations.GutenbergBookReader;
 import org.ulpgc.ports.IndexerReader;
 import org.ulpgc.ports.IndexerStore;
 
+import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.concurrent.TimeUnit;
@@ -27,10 +29,15 @@ public class IndexerTest {
         public Path stopWordsPath;
 
         @Setup(Level.Trial)
-        public void setup() {
+        public void setup() throws IndexerException {
             bookDatalakePath = Paths.get(System.getProperty("user.dir"), "..", "BookDatalake").normalize();
             invertedIndexPath = Paths.get(System.getProperty("user.dir"), "..", "InvertedIndex").normalize();
-            stopWordsPath = Paths.get(System.getProperty("user.dir"), "indexer/src/main/resources/stopwords.txt");
+            try {
+                stopWordsPath = Paths.get(MainWithAggregatedStore.class.getClassLoader()
+                        .getResource("stopwords.txt").toURI());
+            } catch (URISyntaxException e) {
+                throw new IndexerException(e.getMessage(), e);
+            }
 
         }
     }

@@ -23,7 +23,7 @@
         <dependency>
             <groupId>org.jsoup</groupId>
             <artifactId>jsoup</artifactId>
-            <version>1.16.1</version> <!-- Use the latest version -->
+            <version>1.16.1</version>
         </dependency>
     </dependencies>
     <build>
@@ -43,7 +43,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
-                <version>3.4.1</version> <!-- Usa la última versión -->
+                <version>3.4.1</version>
                 <executions>
                     <execution>
                         <phase>package</phase>

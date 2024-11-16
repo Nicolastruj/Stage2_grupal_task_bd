@@ -150,6 +150,13 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="\InvertedIndex\5\5.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value=";" />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="\InvertedIndex\7\7.csv">
           <value>
             <Attribute>
@@ -193,6 +200,13 @@
           </value>
         </entry>
         <entry key="\InvertedIndex\c\a\n\can.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\InvertedIndex\c\c.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />

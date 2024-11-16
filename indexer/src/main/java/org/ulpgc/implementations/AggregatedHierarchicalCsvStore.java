@@ -15,7 +15,6 @@ import java.util.stream.Collectors;
 public class AggregatedHierarchicalCsvStore implements IndexerStore {
 
     private static Path invertedIndexPath;
-    private static Path loadStopWords;
     private static final int maxDepth = 3;
     private static final Set<String> stopWords = new HashSet<>();
 
