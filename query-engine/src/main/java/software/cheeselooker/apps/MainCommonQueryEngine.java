@@ -1,6 +1,4 @@
-package software.cheeselooker.apps;
-
-import software.cheeselooker.control.Command;
+import spark.Spark;
 import software.cheeselooker.control.SearchEngineCommand;
 import software.cheeselooker.exceptions.QueryEngineException;
 import software.cheeselooker.implementations.CommonQueryEngine;
@@ -11,9 +9,11 @@ import software.cheeselooker.ports.Output;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
+import java.util.Map;
 
 public class MainCommonQueryEngine {
-    public static void main(String[] args) throws QueryEngineException {
+    public static void main(String[] args) {
         Path bookDatalakePath = Paths.get(System.getProperty("user.dir"), "/data/datalake");
         Path invertedIndexPath = Paths.get(System.getProperty("user.dir"), "/data/datamart");
         Path metadataPath = Paths.get(System.getProperty("user.dir"), "/data/metadata/metadata.csv");
@@ -25,12 +25,27 @@ public class MainCommonQueryEngine {
                 bookDatalakePath.toString(),
                 invertedIndexPath.toString()
         );
-        Command searchEngineCommand = new SearchEngineCommand(input, output, queryEngine);
 
-        try {
-            searchEngineCommand.execute();
-        } catch (QueryEngineException e) {
-            throw new QueryEngineException(e.getMessage(), e);
-        }
+        Spark.port(8080); // Expose the application on port 8080
+
+        Spark.get("/search", (req, res) -> {
+            String query = req.queryParams("q");
+            if (query == null || query.trim().isEmpty()) {
+                res.status(400);
+                return "Query parameter 'q' is required.";
+            }
+
+            String[] words = query.split("\\s+");
+            try {
+                List<Map<String, Object>> results = queryEngine.query(words);
+                res.type("application/json");
+                return results; // Convert to JSON format if necessary
+            } catch (QueryEngineException e) {
+                res.status(500);
+                return "Error processing query: " + e.getMessage();
+            }
+        });
+
+        System.out.println("Query engine running on http://localhost:8080/search?q=<word>");
     }
 }
